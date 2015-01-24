@@ -147,7 +147,7 @@ void track_path(int from, int to, int ttl, int nrnode)
 						// 找到路径
 						newdog->flag = F_FOUND;
 						track_print(newdog, ++path_nr);
-					} else 
+					} 
 					while ( insert_point ) {
 						if ( newdog->nr == insert_point->nr 
 							&& 0 == memcmp(newdog->path, 
