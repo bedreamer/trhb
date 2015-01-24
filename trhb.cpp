@@ -102,13 +102,15 @@ int next_link_not_in_passed(const struct track_dog *dog, int nextlink)
 
 void track_print(const struct track_dog *dog, int nr)
 {
-	int i;
+	int i, dis = 0;
 
 	printf("%d:BEGIN>>", nr);
 	for ( i = 0; i < dog->nr; i ++ ) {
 		printf(" %c >>", dog->path[i] + 'A');
+		if ( i == dog->nr - 1 ) continue;
+		dis += p_link[ dog->path[i] ][ dog->path[i + 1] ];
 	}
-	printf("END\n");
+	printf("distence: %d END\n", dis);
 }
 
 void track_path(int from, int to, int ttl, int nrnode)
@@ -141,6 +143,11 @@ void track_path(int from, int to, int ttl, int nrnode)
 					if ( ! next_link_not_in_passed(gen, nextlink) ) continue;
 					linknr ++;
 					dog_clone(gen, &newdog, nextlink, gen->ttl - 1, nrnode);
+					if ( newdog->path[ newdog->nr - 1 ] == to ) {
+						// 找到路径
+						newdog->flag = F_FOUND;
+						track_print(newdog, ++path_nr);
+					} else 
 					while ( insert_point ) {
 						if ( newdog->nr == insert_point->nr 
 							&& 0 == memcmp(newdog->path, 
@@ -172,11 +179,11 @@ void track_path(int from, int to, int ttl, int nrnode)
 		do { // 标记节点
 			struct track_dog *valid_dog = head;
 			while ( valid_dog ) {
-				if ( valid_dog->path[ valid_dog->nr - 1 ] == to ) {
+				/*if ( valid_dog->path[ valid_dog->nr - 1 ] == to ) {
 					// 找到路径
 					valid_dog->flag = F_FOUND;
 					track_print(valid_dog, ++path_nr);
-				} else if ( valid_dog->ttl <= 0 ) {
+				} else */if ( valid_dog->ttl <= 0 ) {
 					valid_dog->flag = F_DELETE;
 				} else if ( valid_dog->nr > nrnode ) {
 					valid_dog->flag = F_DELETE;
@@ -256,13 +263,13 @@ int _tmain(int argc, _TCHAR* argv[])
 					printf("%3d ", p_link[y][x]);
 					continue;
 				}
-				if ( x > y ) {
+				//if ( x > y ) {
 					if ( rand() % 1000 > 500 )
-						p_link[y][x] = 1;
+						p_link[y][x] = rand() % 500;
 					else p_link[y][x] = -1;
-				} else {
-					p_link[y][x] = p_link[x][y];
-				}
+				//} else {
+				//	p_link[y][x] = p_link[x][y];
+				//}
 				printf("%3d ", p_link[y][x]);
 			}
 			printf("\n");
