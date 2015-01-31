@@ -1,7 +1,6 @@
 // trhb.cpp : 定义控制台应用程序的入口点。
 //
-
-#include "stdafx.h"
+#include <stdio.h>
 #include <memory.h>
 #include <time.h>
 #include <stdlib.h>
@@ -242,7 +241,7 @@ void track_path(int from, int to, int ttl, int nrnode)
 	malloced = 0;
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	int from, to, step, nrnode;
 	int x, y;
